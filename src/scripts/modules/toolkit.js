@@ -1,9 +1,11 @@
-const toolkitsList = document.querySelectorAll('.plus-btn--toolkit');
-const roomsBtnList = document.querySelectorAll('.rooms__item');
-const kitchenSchema = document.querySelector('.schema--kitchen');
-const roomSchema = document.querySelector('.schema--room');
-const bathSchema = document.querySelector('.schema--bath');
-const roomsShemaList = document.querySelectorAll('.rooms__schema');
+$(function(){
+  const toolkitsList = document.querySelectorAll('.plus-btn--toolkit');
+const roomsBtnList = $('.rooms__item');
+const kitchenSchema = $('.schema--kitchen');
+const roomSchema = $('.schema--room');
+const bathSchema = $('.schema--bath');
+const roomsSchemaList = $('.rooms__schema');
+
 toolkitsList.forEach(el => {
   el.addEventListener('mouseenter', () => {
     toggleToolkitDescVisibility(el);
@@ -13,10 +15,8 @@ toolkitsList.forEach(el => {
   });
 });
 
-roomsBtnList.forEach(el => {
-  el.addEventListener('click', e => {
-    onRoomBtnClick(e);
-  });
+roomsBtnList.on("click", function(e) {
+  onRoomBtnClick(e);
 });
 
 function toggleToolkitDescVisibility(el) {
@@ -25,16 +25,18 @@ function toggleToolkitDescVisibility(el) {
   descItem.classList.toggle('is-shown');
 }
 
+
 function onRoomBtnClick(e) {
-  const clickedButton = e.target;
-  if (clickedButton.classList.contains('rooms__item--current')) return;
-  roomsBtnList.forEach(button => {
-    if (button === clickedButton) {
-      const id = button.id;
+  const clickedButton = $(e.target);
+  if (clickedButton.hasClass('rooms__item--current')) return;
+
+  roomsBtnList.each(function() {
+    if ($(this).is(clickedButton)) {
+      const id = clickedButton.attr('id');
       setRoomSchemaToDisplay(id);
-      button.classList.add('rooms__item--current');
+      clickedButton.addClass('rooms__item--current');
     } else {
-      button.classList.remove('rooms__item--current');
+      $(this).removeClass('rooms__item--current');
     }
   });
 }
@@ -46,23 +48,28 @@ function setRoomSchemaToDisplay(id) {
     'rooms__schema--prev',
   ];
 
-  [...roomsShemaList].forEach(el => {
-    classListToRemove.forEach(className => {
-      el.classList.remove(className);
+  roomsSchemaList.each(function() {
+    const schemaItem = $(this);
+    classListToRemove.forEach(function(className) {
+      schemaItem.removeClass(className);
     });
   });
 
   if (id === 'room-1') {
-    kitchenSchema.classList.add('rooms__schema--current');
-    roomSchema.classList.add('rooms__schema--next');
-    bathSchema.classList.add('rooms__schema--prev');
+    kitchenSchema.addClass('rooms__schema--current');
+    roomSchema.addClass('rooms__schema--next');
+    bathSchema.addClass('rooms__schema--prev');
   } else if (id === 'room-2') {
-    kitchenSchema.classList.add('rooms__schema--prev');
-    roomSchema.classList.add('rooms__schema--current');
-    bathSchema.classList.add('rooms__schema--next');
+    kitchenSchema.addClass('rooms__schema--prev');
+    roomSchema.addClass('rooms__schema--current');
+    bathSchema.addClass('rooms__schema--next');
   } else if (id === 'room-3') {
-    kitchenSchema.classList.add('rooms__schema--next');
-    roomSchema.classList.add('rooms__schema--prev');
-    bathSchema.classList.add('rooms__schema--current');
+    kitchenSchema.addClass('rooms__schema--next');
+    roomSchema.addClass('rooms__schema--prev');
+    bathSchema.addClass('rooms__schema--current');
   }
 }
+
+
+
+})
